@@ -176,7 +176,7 @@ function uploadImage(req, res){
         if(userId != req.user.sub){
           return removeFilesOfUploads(res, file_path, 'No tienes permisos para actualizar lo que pediste');
         }
-        if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){
+        if(file_ext == 'png' || file_ext == 'jpg' || file_ext == 'jpeg' || file_ext == 'gif'){ // lets check our extension, we are allowing only this
             // we got everything k ! so we change our data on db
             User.findByIdAndUpdate(userId, {image: file_name}, {new:true}, (err, userUpdated)=>{
               if(err) return res.status(500).send({message: 'Ha ocurrido un error en tu petición'});
@@ -194,13 +194,13 @@ function uploadImage(req, res){
 }
 
 
-function removeFilesOfUploads(res, file_path, message){ // function to remove files after an error
+function removeFilesOfUploads(res, file_path, message){ // function to remove files, we need to pass res, a file path to delete and a string with a message
     fs.unlink(file_path, (err) =>{
       return res.status(500).send({message: message});
     });
 }
 
-function getImageFile(req, res){
+function getImageFile(req, res){ // this function is to get an image
   var image_file = req.params.imageFile;
   var path_file = './uploads/users/'+image_file;
 
